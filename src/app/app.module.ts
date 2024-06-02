@@ -9,28 +9,32 @@ import { HttpErrInterceptor } from './services/http-err.interceptor';
 import { GlobalErrorHandlerService } from './services/global-error-handler.service';
 import { ToastrModule } from 'ngx-toastr';
 import { ArticleComponent } from './article/article.component';
+import { TestCDRComponent } from './test-cdr/test-cdr.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ArticleComponent
-  ],
+  declarations: [AppComponent, ArticleComponent, TestCDRComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
 
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS, useClass: HttpErrInterceptor, multi: true
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrInterceptor,
+      multi: true,
     },
     {
-      provide: ErrorHandler, useClass: GlobalErrorHandlerService
-    }
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandlerService,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

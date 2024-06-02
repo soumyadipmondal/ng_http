@@ -2,14 +2,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class GlobalErrorHandlerService implements ErrorHandler{
-
-  constructor() { }
+export class GlobalErrorHandlerService implements ErrorHandler {
+  constructor() {}
 
   handleError(error: HttpErrorResponse) {
-    console.log("Global Services");
-    console.log(typeof(error))
+    console.log('Global Services called');
+    console.log(typeof error);
   }
 }

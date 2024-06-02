@@ -1,2 +1,5 @@
 <p>article works!</p>
-{{ reqServ.storedData | json }}
+<p *ngIf="data.length === 0">Data Is empty</p>
+<ul *ngIf="data.length > 0">
+  <li *ngFor="let item of data">{{ item.title }}</li>
+</ul>

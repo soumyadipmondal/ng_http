@@ -1,7 +1,11 @@
 <div class="wrapper">
   <hr />
   <h1>Home Page</h1>
+  {{ error | json }}
+  <p *ngIf="error">Error!</p>
+  <app-test-cdr></app-test-cdr>
   <button [routerLink]="'/article'">Redirect ME</button>
 </div>
+<div class="loading" *ngIf="isLoading">Loading ......!</div>
 
 <router-outlet></router-outlet>

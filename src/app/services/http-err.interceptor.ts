@@ -4,53 +4,56 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class HttpErrInterceptor implements HttpInterceptor {
-
   constructor(private _toastr: ToastrService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     //console.log("Interceptor Called");
-    return next.handle(request)
-      .pipe(
-        catchError((error:HttpErrorResponse) => {
-          const errorMessage: { errMsg: string, isHandled: boolean } = this.errorHandler(error);
-          const toastConfig = {
-            progressBar: true,
-            positionClass: 'toast-top-right',
-            closeButton:true
-          }
-          console.log(error)
-          if (errorMessage.isHandled) {
-            //return of(error)
-            this._toastr.error(errorMessage.errMsg, 'Error', toastConfig);
-            return throwError(errorMessage.errMsg)
-          } else {
-            this._toastr.error(errorMessage.errMsg, 'Error', toastConfig);
-              return throwError(errorMessage)
-          }
-        })
-      );
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.log('Interceptor Called');
+        const errorMessage: { errMsg: string; isHandled: boolean } =
+          this.errorHandler(error);
+        const toastConfig = {
+          progressBar: true,
+          positionClass: 'toast-top-right',
+          closeButton: true,
+        };
+        if (errorMessage.isHandled) {
+          //return of(error)
+          this._toastr.error(errorMessage.errMsg, 'Error', toastConfig);
+          return throwError(errorMessage.errMsg);
+        } else {
+          this._toastr.error(errorMessage.errMsg, 'Error', toastConfig);
+          return throwError(errorMessage);
+        }
+      })
+    );
   }
 
-  errorHandler(err: HttpErrorResponse): {errMsg:string, isHandled:boolean} {
+  errorHandler(err: HttpErrorResponse): { errMsg: string; isHandled: boolean } {
+    console.log(err);
     let errMsg = '';
     let isHandled: boolean = false;
     if (err instanceof HttpErrorResponse) {
       if (err instanceof ErrorEvent) {
         //Client Side Error
-        
-        errMsg = "Client Side Error Occure"
-        return {errMsg, isHandled}
+
+        errMsg = 'Client Side Error Occure';
+        return { errMsg, isHandled };
       } else {
         //Server side Error
-        console.log("Hit")
-        errMsg = "Server Side Error Occure::";
+        console.log('Hit');
+        errMsg = 'Server Side Error Occure::';
         switch (err.status) {
           case 400:
             errMsg += 'Bad Request Made';
@@ -68,18 +71,17 @@ export class HttpErrInterceptor implements HttpInterceptor {
             errMsg += 'URL Not Found';
             isHandled = true;
             break;
-          
+
           default:
             errMsg += 'Unknown Error';
             isHandled = true;
         }
-        return {errMsg, isHandled}
+        return { errMsg, isHandled };
       }
-      
     } else {
-      console.log("Un")
-      errMsg = "Unknown Error";
-      return {errMsg, isHandled}
-    };
+      console.log('Un');
+      errMsg = 'Unknown Error';
+      return { errMsg, isHandled };
+    }
   }
 }

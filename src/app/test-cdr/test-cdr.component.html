@@ -1,0 +1,12 @@
+<form action="" [formGroup]="selectForm">
+  <select
+    type="number"
+    formControlName="category"
+    [(ngModel)]="selectVal"
+    (change)="onChange($event)"
+  >
+    <option *ngFor="let cdr of categories" [ngValue]="cdr">
+      {{ cdr.name }}
+    </option>
+  </select>
+</form>
